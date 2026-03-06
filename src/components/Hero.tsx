@@ -38,15 +38,16 @@ export default function Hero() {
           </div>
 
           <div className="flex flex-wrap gap-3 md:gap-4 justify-center md:justify-start pt-4">
-            <motion.button
+            <motion.a
+              href="/cv.pdf"
+              download="Fahrunnisa_Indah_Cahyani_CV.pdf"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 py-2.5 md:px-8 md:py-3 bg-rose-600 text-white rounded-full font-medium text-sm md:text-base shadow-lg hover:bg-rose-700 transition-colors flex items-center gap-2"
-              onClick={() => window.print()}
+              className="px-6 py-2.5 md:px-8 md:py-3 bg-rose-600 text-white rounded-full font-medium text-sm md:text-base shadow-lg hover:bg-rose-700 transition-colors flex items-center gap-2 cursor-pointer"
             >
               <Download size={18} className="md:w-5 md:h-5" />
               Download CV
-            </motion.button>
+            </motion.a>
             <div className="flex gap-3 md:gap-4 items-center">
               <a href="https://www.linkedin.com/in/fahrunnisa-indah-cahyani" target="_blank" rel="noopener noreferrer" className="p-2.5 md:p-3 bg-white text-slate-700 rounded-full shadow-md hover:text-rose-600 transition-colors">
                 <Linkedin size={18} className="md:w-5 md:h-5" />
@@ -61,9 +62,9 @@ export default function Hero() {
         {/* Right Side - Image */}
         <motion.div 
           className="w-full md:w-1/2 flex justify-center md:justify-end"
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 2, ease: "easeOut", delay: 1 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 1 }}
         >
           <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-96 md:h-96">
             <div className="absolute inset-0 bg-rose-200 rounded-3xl blur-3xl opacity-50 animate-pulse"></div>
