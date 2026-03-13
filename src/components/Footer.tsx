@@ -12,15 +12,18 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="flex gap-4 md:gap-6">
-            <a href="https://www.linkedin.com/in/fahrunnisa-indah-cahyani" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-rose-400 transition-colors">
-              <Linkedin size={20} className="md:w-6 md:h-6" />
+          <div className="flex flex-col gap-3 md:gap-4 mt-6 md:mt-0 items-start md:items-end">
+            <a href="https://www.linkedin.com/in/fahrunnisa-indah-cahyani" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
+              <Linkedin size={20} className="md:w-5 md:h-5" />
+              <span className="text-sm">Fahrunnisa Indah Cahyani</span>
             </a>
-            <a href="mailto:fahrunnisa.cahyani@gmail.com" className="text-slate-400 hover:text-rose-400 transition-colors">
-              <Mail size={20} className="md:w-6 md:h-6" />
+            <a href="mailto:fahrunnisa.cahyani@gmail.com" className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
+              <Mail size={20} className="md:w-5 md:h-5" />
+              <span className="text-sm">fahrunnisa.cahyani@gmail.com</span>
             </a>
-            <a href="tel:+628980835200" className="text-slate-400 hover:text-rose-400 transition-colors">
-              <Phone size={20} className="md:w-6 md:h-6" />
+            <a href="tel:+628980835200" className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
+              <Phone size={20} className="md:w-5 md:h-5" />
+              <span className="text-sm">+62 898-0835-200</span>
             </a>
           </div>
         </div>

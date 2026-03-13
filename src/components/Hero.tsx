@@ -47,9 +47,8 @@ export default function Hero() {
             <span className="text-rose-600">Fahrunnisa Indah Cahyani</span>
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-lg mx-auto md:mx-0 leading-relaxed">
-            Bachelor of Information System Major from Universitas Klabat with a 3.98 GPA.
-            Strong interest in Business Intelligence & Analytics, Business Process Reengineering (BPR), and Digital Marketing.
-            Experienced in working on IT-based and data analysis projects to support decision-making.
+            Fresh graduate in Information Systems from Klabat University with a GPA of 3.98. Interested in data analysis, business analysis, system analysis, and ERP implementation.
+            Skilled in Microsoft Excel, Python for data cleaning, Power BI for data visualization, and familiar with Odoo ERP. A fast learner who adapts quickly and is motivated to develop data-driven solutions for business decision-making.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center md:justify-start pt-2 md:pt-4 text-slate-600 text-xs sm:text-sm">
@@ -75,12 +74,24 @@ export default function Hero() {
               Download CV
             </motion.a>
             <div className="flex gap-3 md:gap-4 items-center">
-              <a href="https://www.linkedin.com/in/fahrunnisa-indah-cahyani" target="_blank" rel="noopener noreferrer" className="p-2.5 md:p-3 bg-white text-slate-700 rounded-full shadow-md hover:text-rose-600 transition-colors">
-                <Linkedin size={18} className="md:w-5 md:h-5" />
-              </a>
-              <a href="mailto:fahrunnisa.cahyani@gmail.com" className="p-2.5 md:p-3 bg-white text-slate-700 rounded-full shadow-md hover:text-rose-600 transition-colors">
-                <Mail size={18} className="md:w-5 md:h-5" />
-              </a>
+              <motion.a 
+                href="https://www.linkedin.com/in/fahrunnisa-indah-cahyani" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2.5 md:p-3 bg-white text-slate-700 rounded-full shadow-md hover:text-rose-600 transition-colors flex items-center justify-center gap-2"
+              >
+                <Linkedin size={18} className="md:w-5 md:h-5 text-rose-500" />
+              </motion.a>
+              <motion.a 
+                href="mailto:fahrunnisa.cahyani@gmail.com" 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2.5 md:p-3 bg-white text-slate-700 rounded-full shadow-md hover:text-rose-600 transition-colors flex items-center justify-center gap-2"
+              >
+                <Mail size={18} className="md:w-5 md:h-5 text-rose-500" />
+              </motion.a>
             </div>
           </div>
         </motion.div>

@@ -207,37 +207,16 @@ export default function Experience() {
           </h2>
           <div className="w-16 h-1 md:w-20 bg-rose-500 mx-auto rounded-full" />
           <p className="mt-3 md:mt-4 text-sm md:text-base text-slate-600">
-            Organizational Experiences
+            Professional & Project Experiences
           </p>
         </motion.div>
 
-        {/* Organizational Experience */}
-        <motion.div
-          className="flex items-center gap-3 mb-8 w-full"
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="p-2 bg-rose-500 rounded-lg shrink-0">
-            <Users size={20} className="text-white" />
-          </div>
-          <h3 className="text-xl md:text-2xl font-bold text-slate-900">
-            Organizational Experience
-          </h3>
-        </motion.div>
-
-        
         {loading && <p className="text-center text-rose-500 text-sm italic mb-8 animate-pulse">Loading latest experiences...</p>}
         {error && <p className="text-center text-slate-400 text-xs italic mb-8">{error}</p>}
 
-        <Timeline
-          items={orgExperiences}
-          icon={<Users size={16} className="text-rose-500 md:w-[18px] md:h-[18px]" />}
-        />
-
-        {/* Project Experience */}
+        {/* Project Experience First */}
         <motion.div
-          className="flex items-center gap-3 mb-8 mt-16 md:mt-24 w-full"
+          className="flex items-center gap-3 mb-8 w-full"
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -253,6 +232,26 @@ export default function Experience() {
         <Timeline
           items={projExperiences}
           icon={<Briefcase size={16} className="text-rose-500 md:w-[18px] md:h-[18px]" />}
+        />
+
+        {/* Organizational Experience Second */}
+        <motion.div
+          className="flex items-center gap-3 mb-8 mt-16 md:mt-24 w-full"
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="p-2 bg-rose-500 rounded-lg shrink-0">
+            <Users size={20} className="text-white" />
+          </div>
+          <h3 className="text-xl md:text-2xl font-bold text-slate-900">
+            Organizational Experience
+          </h3>
+        </motion.div>
+
+        <Timeline
+          items={orgExperiences}
+          icon={<Users size={16} className="text-rose-500 md:w-[18px] md:h-[18px]" />}
         />
       </div>
     </section>
