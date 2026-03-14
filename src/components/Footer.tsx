@@ -1,6 +1,33 @@
-import { Linkedin, Mail, Phone } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Linkedin, Mail, Phone, MessageCircle } from "lucide-react";
+import { collection, getDocs, limit, query } from "firebase/firestore";
+import { db } from "../firebase";
 
 export default function Footer() {
+  const [phone, setPhone] = useState("+62 898-0835-200");
+  const [email, setEmail] = useState("fahrunnisa.cahyani@gmail.com");
+  const [linkedin, setLinkedin] = useState("https://www.linkedin.com/in/fahrunnisa-indah-cahyani-b54252271");
+  const [whatsapp, setWhatsapp] = useState("");
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const q = query(collection(db, "profile"), limit(1));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const profileData = querySnapshot.docs[0].data();
+          if (profileData.phone) setPhone(profileData.phone);
+          if (profileData.email) setEmail(profileData.email);
+          if (profileData.linkedin) setLinkedin(profileData.linkedin);
+          if (profileData.whatsapp) setWhatsapp(profileData.whatsapp);
+        }
+      } catch (error) {
+        console.error("Error fetching profile info in footer:", error);
+      }
+    };
+    fetchProfile();
+  }, []);
+
   return (
     <footer id="footer" className="bg-slate-900 text-white py-8 md:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,18 +40,24 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col gap-3 md:gap-4 mt-6 md:mt-0 items-start md:items-end">
-            <a href="https://www.linkedin.com/in/fahrunnisa-indah-cahyani" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
+            <a href={linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
               <Linkedin size={20} className="md:w-5 md:h-5" />
               <span className="text-sm">Fahrunnisa Indah Cahyani</span>
             </a>
-            <a href="mailto:fahrunnisa.cahyani@gmail.com" className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
+            <a href={`mailto:${email}`} className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
               <Mail size={20} className="md:w-5 md:h-5" />
-              <span className="text-sm">fahrunnisa.cahyani@gmail.com</span>
+              <span className="text-sm">{email}</span>
             </a>
-            <a href="tel:+628980835200" className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
+            <a href={`tel:${phone}`} className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
               <Phone size={20} className="md:w-5 md:h-5" />
-              <span className="text-sm">+62 898-0835-200</span>
+              <span className="text-sm">{phone}</span>
             </a>
+            {whatsapp && (
+              <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-400 hover:text-rose-400 transition-colors">
+                <MessageCircle size={20} className="md:w-5 md:h-5" />
+                <span className="text-sm">WhatsApp</span>
+              </a>
+            )}
           </div>
         </div>
 

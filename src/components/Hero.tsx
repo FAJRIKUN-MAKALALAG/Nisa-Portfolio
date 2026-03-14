@@ -1,12 +1,31 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Download, Linkedin, Mail, Phone, MapPin } from "lucide-react";
-import { collection, getDocs, limit, query } from "firebase/firestore";
+import { Download, Linkedin, Mail, Phone, MapPin, Edit2, X, AlertCircle, MessageCircle } from "lucide-react";
+import { collection, getDocs, limit, query, doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 export default function Hero() {
   const [profileImg, setProfileImg] = useState<string | null>(null);
+  const [location, setLocation] = useState("Airmadidi, Minahasa Utara");
+  const [phone, setPhone] = useState("+62 898-0835-200");
+  const [email, setEmail] = useState("fahrunnisa.cahyani@gmail.com");
+  const [linkedin, setLinkedin] = useState("https://www.linkedin.com/in/fahrunnisa-indah-cahyani-b54252271");
+  const [whatsapp, setWhatsapp] = useState("");
+  
   const [loading, setLoading] = useState(true);
+  const [profileDocId, setProfileDocId] = useState<string | null>(null);
+
+  // Edit Mode State
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [savingLoading, setSavingLoading] = useState(false);
+  const [editData, setEditData] = useState({
+    foto: "",
+    location: "",
+    phone: "",
+    email: "",
+    linkedin: "",
+    whatsapp: "",
+  });
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -14,19 +33,67 @@ export default function Hero() {
         const q = query(collection(db, "profile"), limit(1));
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
-          const profileData = querySnapshot.docs[0].data();
-          if (profileData.foto) {
-            setProfileImg(profileData.foto);
-          }
+          const profileDoc = querySnapshot.docs[0];
+          setProfileDocId(profileDoc.id);
+          const profileData = profileDoc.data();
+          if (profileData.foto) setProfileImg(profileData.foto);
+          if (profileData.location) setLocation(profileData.location);
+          if (profileData.phone) setPhone(profileData.phone);
+          if (profileData.email) setEmail(profileData.email);
+          if (profileData.linkedin) setLinkedin(profileData.linkedin);
+          if (profileData.whatsapp) setWhatsapp(profileData.whatsapp);
+          
+          setEditData({
+            foto: profileData.foto || "",
+            location: profileData.location || "Airmadidi, Minahasa Utara",
+            phone: profileData.phone || "+62 898-0835-200",
+            email: profileData.email || "fahrunnisa.cahyani@gmail.com",
+            linkedin: profileData.linkedin || "https://www.linkedin.com/in/fahrunnisa-indah-cahyani-b54252271?...",
+            whatsapp: profileData.whatsapp || "",
+          });
+        } else {
+          // Initialize defaults for edit form if no document exists
+          setEditData({
+            foto: "",
+            location: "Airmadidi, Minahasa Utara",
+            phone: "+62 898-0835-200",
+            email: "fahrunnisa.cahyani@gmail.com",
+            linkedin: "https://www.linkedin.com/in/fahrunnisa-indah-cahyani-b54252271?...",
+            whatsapp: "",
+          });
         }
       } catch (error) {
-        console.error("Error fetching profile image:", error);
+        console.error("Error fetching profile info:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchProfile();
   }, []);
+
+  const handleSaveProfile = async () => {
+    setSavingLoading(true);
+    try {
+      const docRef = doc(collection(db, "profile"), profileDocId || "main");
+      await setDoc(docRef, editData, { merge: true });
+      
+      // Update local state
+      setProfileImg(editData.foto);
+      setLocation(editData.location);
+      setPhone(editData.phone);
+      setEmail(editData.email);
+      setLinkedin(editData.linkedin);
+      setWhatsapp(editData.whatsapp);
+      
+      alert("Profile updated successfully!");
+      setIsEditingProfile(false);
+    } catch (err) {
+      console.error("Error saving profile:", err);
+      alert("Failed to save profile. Check Firestore rules.");
+    } finally {
+      setSavingLoading(false);
+    }
+  };
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center pt-16 bg-transparent overflow-hidden">
@@ -54,11 +121,11 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center md:justify-start pt-2 md:pt-4 text-slate-600 text-xs sm:text-sm">
             <div className="flex items-center gap-2 justify-center sm:justify-start">
               <MapPin size={16} className="text-rose-500" />
-              <span>Airmadidi, Minahasa Utara</span>
+              <span>{location}</span>
             </div>
             <div className="flex items-center gap-2 justify-center sm:justify-start">
               <Phone size={16} className="text-rose-500" />
-              <span>+62 898-0835-200</span>
+              <span>{phone}</span>
             </div>
           </div>
 
@@ -75,7 +142,7 @@ export default function Hero() {
             </motion.a>
             <div className="flex gap-3 md:gap-4 items-center">
               <motion.a
-                href="https://www.linkedin.com/in/fahrunnisa-indah-cahyani-b54252271?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+                href={linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
@@ -85,13 +152,27 @@ export default function Hero() {
                 <Linkedin size={18} className="md:w-5 md:h-5 text-rose-500" />
               </motion.a>
               <motion.a
-                href="mailto:fahrunnisa.cahyani@gmail.com"
+                href={`mailto:${email}`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="p-2.5 md:p-3 bg-white text-slate-700 rounded-full shadow-md hover:text-rose-600 transition-colors flex items-center justify-center gap-2"
+                title="Email"
               >
                 <Mail size={18} className="md:w-5 md:h-5 text-rose-500" />
               </motion.a>
+              {whatsapp && (
+                <motion.a
+                  href={whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-2.5 md:p-3 bg-white text-slate-700 rounded-full shadow-md hover:text-rose-600 transition-colors flex items-center justify-center gap-2"
+                  title="WhatsApp"
+                >
+                  <MessageCircle size={18} className="md:w-5 md:h-5 text-rose-500" />
+                </motion.a>
+              )}
             </div>
           </div>
         </motion.div>
