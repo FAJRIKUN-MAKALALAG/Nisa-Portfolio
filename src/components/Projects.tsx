@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { motion, AnimatePresence } from "motion/react";
-import { FileText, Loader2, AlertCircle, FolderOpen, X, ExternalLink, Figma, Github, Globe, Plus, Trash2 } from "lucide-react";
+import { FileText, Loader2, AlertCircle, FolderOpen, X, ExternalLink, Figma, Github, Globe } from "lucide-react";
 
 export interface ProjectLink {
   label: string;
@@ -23,19 +23,6 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
-  // Temporary Form State
-  const [isAddingMode, setIsAddingMode] = useState(false);
-  const [addingLoading, setAddingLoading] = useState(false);
-  const [newProject, setNewProject] = useState<Omit<Project, "id">>({
-    title: "",
-    description: "",
-    coverImage: "",
-    pdfUrl: "",
-    links: [],
-  });
-  const [newLinkLabel, setNewLinkLabel] = useState("");
-  const [newLinkUrl, setNewLinkUrl] = useState("");
 
   const fetchProjects = async () => {
     try {
@@ -58,48 +45,7 @@ export default function Projects() {
     fetchProjects();
   }, []);
 
-  const handleAddLink = () => {
-    if (newLinkLabel && newLinkUrl) {
-      setNewProject((prev) => ({
-        ...prev,
-        links: [...(prev.links || []), { label: newLinkLabel, url: newLinkUrl }],
-      }));
-      setNewLinkLabel("");
-      setNewLinkUrl("");
-    }
-  };
 
-  const handleRemoveLink = (indexToRemove: number) => {
-    setNewProject((prev) => ({
-      ...prev,
-      links: prev.links?.filter((_, index) => index !== indexToRemove),
-    }));
-  };
-
-  const handleSaveNewProject = async () => {
-    if (!newProject.title || !newProject.description) {
-      alert("Please fill in at least the title and description.");
-      return;
-    }
-    setAddingLoading(true);
-    try {
-      // Clean up empty pdfUrl if not used
-      const dataToSave = { ...newProject };
-      if (!dataToSave.pdfUrl) delete dataToSave.pdfUrl;
-      
-      await addDoc(collection(db, "projects"), dataToSave);
-      
-      alert("Project added successfully!");
-      setIsAddingMode(false);
-      setNewProject({ title: "", description: "", coverImage: "", pdfUrl: "", links: [] });
-      fetchProjects(); // Refresh the list
-    } catch (error) {
-      console.error("Error adding project:", error);
-      alert("Error adding project. Check your Firestore rules.");
-    } finally {
-      setAddingLoading(false);
-    }
-  };
 
   // Helper for rendering the correct icon
   const renderLinkIcon = (label?: string) => {
@@ -129,72 +75,6 @@ export default function Projects() {
             Click on a project card to see more details
           </p>
         </motion.div>
-
-        {/* TEMPORARY ADD FORM MODAL */}
-        <AnimatePresence>
-          {isAddingMode && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsAddingMode(false)} />
-              <div className="relative bg-white w-full max-w-2xl rounded-2xl shadow-2xl p-6 md:p-8 z-10 max-h-[90vh] overflow-y-auto">
-                <button onClick={() => setIsAddingMode(false)} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-rose-500 rounded-full">
-                  <X size={20} />
-                </button>
-                <h3 className="text-2xl font-bold text-slate-800 mb-6 border-b pb-2">Add New Project</h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Title *</label>
-                    <input type="text" value={newProject.title} onChange={e => setNewProject({...newProject, title: e.target.value})} className="w-full p-2 border rounded" placeholder="E.g., MapalusAD Multi-Vendor" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Description *</label>
-                    <textarea value={newProject.description} onChange={e => setNewProject({...newProject, description: e.target.value})} className="w-full p-2 border rounded min-h-[100px]" placeholder="Brief project description..." />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Cover Image URL (Optional)</label>
-                    <input type="text" value={newProject.coverImage} onChange={e => setNewProject({...newProject, coverImage: e.target.value})} className="w-full p-2 border rounded" placeholder="https://i.imgur.com/..." />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">PDF URL (Legacy, Optional)</label>
-                    <input type="text" value={newProject.pdfUrl} onChange={e => setNewProject({...newProject, pdfUrl: e.target.value})} className="w-full p-2 border rounded" placeholder="https://..." />
-                  </div>
-                  
-                  <div className="border border-slate-200 p-4 rounded-lg bg-slate-50">
-                    <label className="block text-sm font-bold text-slate-700 mb-2">Multiple Links (e.g., Figma, GitHub)</label>
-                    
-                    {/* Render added links */}
-                    {newProject.links && newProject.links.length > 0 && (
-                      <div className="mb-4 space-y-2">
-                        {newProject.links.map((link, idx) => (
-                          <div key={idx} className="flex flex-wrap items-center justify-between bg-white border p-2 rounded gap-2 text-sm">
-                            <span className="font-semibold">{link.label}:</span>
-                            <span className="truncate text-slate-500 flex-1">{link.url}</span>
-                            <button onClick={() => handleRemoveLink(idx)} className="text-red-500 hover:bg-red-50 p-1 rounded">
-                              <Trash2 size={16} />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <input type="text" value={newLinkLabel} onChange={e => setNewLinkLabel(e.target.value)} className="flex-1 p-2 border rounded text-sm" placeholder="Label (e.g., Figma, GitHub)" />
-                      <input type="text" value={newLinkUrl} onChange={e => setNewLinkUrl(e.target.value)} className="flex-[2] p-2 border rounded text-sm" placeholder="URL (https://...)" />
-                      <button onClick={handleAddLink} type="button" className="px-4 py-2 bg-slate-800 text-white rounded font-semibold text-sm hover:bg-slate-700 transition">Add Link</button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8 flex justify-end gap-3">
-                  <button onClick={() => setIsAddingMode(false)} className="px-5 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded">Cancel</button>
-                  <button onClick={handleSaveNewProject} disabled={addingLoading} className="px-6 py-2 bg-rose-600 text-white font-bold rounded hover:bg-rose-700 disabled:opacity-50">
-                    {addingLoading ? "Saving..." : "Save Project"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </AnimatePresence>
 
         {/* Loading State */}
         {loading && (

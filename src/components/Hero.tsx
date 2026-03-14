@@ -74,18 +74,18 @@ export default function Hero() {
               Download CV
             </motion.a>
             <div className="flex gap-3 md:gap-4 items-center">
-              <motion.a 
-                href="https://www.linkedin.com/in/fahrunnisa-indah-cahyani" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <motion.a
+                href="https://www.linkedin.com/in/fahrunnisa-indah-cahyani-b54252271?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="p-2.5 md:p-3 bg-white text-slate-700 rounded-full shadow-md hover:text-rose-600 transition-colors flex items-center justify-center gap-2"
               >
                 <Linkedin size={18} className="md:w-5 md:h-5 text-rose-500" />
               </motion.a>
-              <motion.a 
-                href="mailto:fahrunnisa.cahyani@gmail.com" 
+              <motion.a
+                href="mailto:fahrunnisa.cahyani@gmail.com"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="p-2.5 md:p-3 bg-white text-slate-700 rounded-full shadow-md hover:text-rose-600 transition-colors flex items-center justify-center gap-2"
